@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FAFAFA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nutrition Breakdown"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#333"
+            android:paddingBottom="12dp"
+            android:gravity="center" />
+
+        <!-- Ingredient Cards -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:backgroundTint="#FFFFFF">
+
+            <TextView
+                android:id="@+id/peanutsCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Peanuts: "
+                android:textSize="18sp"
+                android:textColor="#555" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:backgroundTint="#FFFFFF">
+
+            <TextView
+                android:id="@+id/chiaCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chia Seeds: "
+                android:textSize="18sp"
+                android:textColor="#555" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:backgroundTint="#FFFFFF">
+
+            <TextView
+                android:id="@+id/sunflowerCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sunflower Seeds: "
+                android:textSize="18sp"
+                android:textColor="#555" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:backgroundTint="#FFFFFF">
+
+            <TextView
+                android:id="@+id/raisinsCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Raisins: "
+                android:textSize="18sp"
+                android:textColor="#555" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Total Calories Summary -->
+        <TextView
+            android:id="@+id/totalCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total: "
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:gravity="center"
+            android:paddingTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>
