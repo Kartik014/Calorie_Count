@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -16,10 +17,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private val CAMERA_REQUEST_CODE = 1
     private val REQUEST_CAMERA_PERMISSION = 100
     private lateinit var buttonResults: Button
+    private lateinit var data: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         val buttonCapture: Button = findViewById(R.id.buttonCapture)
         buttonResults = findViewById(R.id.buttonResults)
 
-        buttonResults.isEnabled = true // Disable until upload completes
+        buttonResults.isEnabled = false // Disable until upload completes
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED
@@ -64,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("calories", "542")
             intent.putExtra("proteins", "18g")
             intent.putExtra("vitamins", "A, C, D")
+            intent.putExtra("data", data.toString())
             startActivity(intent)
         }
     }
@@ -97,28 +102,40 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun uploadImage(file: File) {
-        val client = OkHttpClient()
+        val client = OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS) // connection timeout
+            .readTimeout(60, TimeUnit.SECONDS)    // socket read timeout
+            .writeTimeout(60, TimeUnit.SECONDS)   // socket write timeout
+            .build()
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("image", file.name, RequestBody.create("image/*".toMediaTypeOrNull(), file))
             .build()
 
         val request = Request.Builder()
-            .url("http://192.168.0.189:3000/upload") // Update to your IP
+            .url("https://8c18-59-89-50-211.ngrok-free.app/upload") // Update to your IP
             .post(requestBody)
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
+                Log.e("UploadError", "Image upload failed: ${e.message}", e)
                 runOnUiThread {
                     Toast.makeText(this@MainActivity, "Upload failed", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body?.string()
+                if (responseBody != null) {
+                    val json = JSONObject(responseBody)
+                    val forwardedResponse = json.optJSONObject("forwardedResponse")
+                    data = forwardedResponse?.optString("result") ?: "No data in forwarded response"
+                }
                 runOnUiThread {
                     Toast.makeText(this@MainActivity, "Upload successful", Toast.LENGTH_SHORT).show()
+                    Log.d("data", data)
                     buttonResults.isEnabled = true
                 }
             }

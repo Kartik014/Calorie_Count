@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("org.json:json:20240303")
     implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
